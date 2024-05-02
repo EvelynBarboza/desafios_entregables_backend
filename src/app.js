@@ -6,6 +6,8 @@ const ProductManager = require('../productManager.js');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}))
+app.use(express.static('public')); //carpeta public sea estatica
+app.use('/static', express.static(__dirname +'/public'));
 
 const productManager = new ProductManager('products.json');
 
