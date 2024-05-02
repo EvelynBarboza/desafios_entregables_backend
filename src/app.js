@@ -4,6 +4,8 @@ const fs = require('fs');
 const ProductManager = require('../productManager.js');
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
 
 const productManager = new ProductManager('products.json');
 
@@ -21,7 +23,7 @@ app.get('/productos', async (req, res) => {
     res.json(objProducts);
    } catch (error) {
     console.error('Error al obtener los productos');
-    res.status(500).send('Error')
+    res.status(500).send('ups! ah ocurrido un error...')
    }
   
   //fs.readFile('../products.json', 'utf8', (err, data) => {
@@ -46,7 +48,7 @@ app.get('/productos/:pid', async (req, res) => {
     }
   } catch (error) {
       console.error('Error al obtener el producto');
-      res.status(500).send('EEROR');
+      res.status(500).send('ups! ah ocurrido un error...');
   }
     //const product = products.find(p => p.id === parseInt(pid));
     //if (product) {
@@ -55,11 +57,29 @@ app.get('/productos/:pid', async (req, res) => {
        // res.status(404).send('Producto no encontrado');
     //}
    });
+
+//ENDPOINT traer todos los usuarios usuarios
+   app.get('/usuario')
+
+// ENDPOINT traer un usuario por id
+   app.get('/usuarios/:uid')
+
+
+
+
+// ENDPOINT -- crear usuario
+   app.post('/api/user', (req, res ) => {
+    let user = req.body;
+      if(!usuer.fist_name || !user.last_name ){
+        return res.status(400).send({status: "error", error: "Faltan campos obligatorios"})
+      }
+    user.push(error);
+    res.send({status:"succes",message: "Usuario creado correctamente"})
+   });
+
+//ENDPOINT -- carrito de compras
+
    
-
-
-
-//const server = https.createServer(app);
 
 app.listen(8080, error => {
   console.log('Servidor escuchando en el puerto 8080 ♥')
