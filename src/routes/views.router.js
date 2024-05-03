@@ -4,14 +4,17 @@ const ProductManager = require('../../productManager')
 const router = Router()
 
 const productManager = new ProductManager();
-//endpoint en ruta raiz
 
-router.get('/products', async (req, res) => {
+
+//ENDPOINT en ruta raiz me trae los productos
+
+router.get('/', async (req, res) => {
     try{
-        const products = await ProductManager.getProducts()
+        const products = await productManager.getProducts()
         res.render('home', {
             title: 'Listado de productos:',
-            products: productManager,
+            products: products,
+            style: 'homestyle.css',
             
         });
     } catch (error){
@@ -21,12 +24,13 @@ router.get('/products', async (req, res) => {
 
 })
 
+//ENDPOINT me trae los productos en tiempo real
 router.get('/realtimeproducts', async (req, res) =>{
     try {
-        const products =  await ProductManager.getProducts();
+        const products =  await productManager.getProducts();
         res.render('realTimeProducts', {
             title: 'Producto en tiempo real',
-            products : productManager,
+            products : products,
 
         })
     } catch (error){

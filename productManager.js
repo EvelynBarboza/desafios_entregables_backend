@@ -4,7 +4,7 @@ const fs = require('fs')
     constructor() {
           this.products =  [];
           this.id = 1;
-          this.filePath = ".products.json"
+          this.filePath = "products.json"
           
         }
     
@@ -40,8 +40,14 @@ const fs = require('fs')
 }
     async getProducts () {
         try {
-            const data = await fs.readFile(this.filePath, 'utf8');
-            return JSON.parse(data);
+            const data = await fs.promises.readFile(this.filePath, 'utf-8', (err, data) => {
+                if (err) {
+                    console.error('Error al obtener productos');
+                    throw err;
+                }
+                return data;
+            });
+         return JSON.parse(data);
         } catch (error) {
             console.error('Error al obtener los productos');
             throw error;

@@ -1,0 +1,37 @@
+[
+    {
+        "title": "Masajes descontracturantes",
+        "description": "dmodf",
+        "price": 800,  
+        "code": "745",
+        "stock": 10
+    },
+    {
+        "title": "Reiki Usui",
+        "description": "fijsdinfvs",
+        "price": 500,
+        "code": "877",
+        "stock": 10
+    },
+    {
+        "title": "Masajes relajantes",
+        "description": "Ms",
+        "price": 700,
+        "code": "966",
+        "stock": 10
+    },
+    {
+        "title": "Registros akashicos",
+        "description": "Msjijoi",
+        "price": 1200,
+        "code": "882",
+        "stock": 10
+    },
+    {
+        "title": "Regresiones a vidas Pasadas",
+        "description": "Msjhyuj",
+        "price": 1500,
+        "code": "550",
+        "stock": 10
+    }
+]
