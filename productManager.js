@@ -1,11 +1,11 @@
 const fs = require('fs')
 
-class ProductManager {
-    constructor(filePath = ".product.json") {
-          this.products =  
+ class ProductManager {
+    constructor() {
+          this.products =  [];
           this.id = 1;
-          this.filePath = filePath;
-          console.log(filePath)
+          this.filePath = ".products.json"
+          
         }
     
         
@@ -105,9 +105,9 @@ class ProductManager {
     }
 };
 
-const productManager = new ProductManager('products.json')
+//const productManager = new ProductManager('products.json')
 
-module.exports = ProductManager
+module.exports = ProductManager;
 //ProductManager.addProduct()
 
 //const product1 = new Product("Reiki", "Terapia ALternativs", 800, 1, 10);
