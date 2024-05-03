@@ -11,7 +11,7 @@ router.get('/products', async (req, res) => {
         const products = await ProductManager.getProducts()
         res.render('home', {
             title: 'Listado de productos:',
-            products: products,
+            products: productManager,
             
         });
     } catch (error){
@@ -26,7 +26,7 @@ router.get('/realtimeproducts', async (req, res) =>{
         const products =  await ProductManager.getProducts();
         res.render('realTimeProducts', {
             title: 'Producto en tiempo real',
-            products : products,
+            products : productManager,
 
         })
     } catch (error){
