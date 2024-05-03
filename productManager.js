@@ -50,8 +50,6 @@ const fs = require('fs')
 
     async getProductById (id) {
         try {
-         //   if (!productId) {
-               // console.error('NOT FOUND')
             const products = await this.getProducts();
             return products.find(product => product.id === parseInt(id));
         
