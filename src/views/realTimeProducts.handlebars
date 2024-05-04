@@ -6,6 +6,34 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div>
+        {{#each products}}
+        <div>
+            <h3>{{this.title}}</h3>
+            <p>{{this.description}}</p>
+            <p>Precio: {{this.price}}</p>
+            <p>Stock:{{this.stock}}</p>
+            <p>Codigo: {{this.code}}</p>
+            <p>id:{{this.id}}</p>
+            <div>
+                <img src="{{this.thumbnail}}" alt=""/>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+        <h2>Agregar Producto:</h2>
+        <div>
+            <form action=""></form>
+            <button id="add_product_id"></button>
+        </div>
+            <h2>Eliminar Producto:</h2>
+        <div>
+            <form action="delete_prdouct_id"></form>
+            <button id="delete_product_id"></button>
+        </div>
+
 </body>
 </html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/realTimeProd.js"></script>

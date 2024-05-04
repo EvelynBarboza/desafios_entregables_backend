@@ -1,4 +1,12 @@
+* {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 h2 {
+    color: rgb(115, 0, 223);
+    font-size: xx-large;
+}
+
+h3 {
     color: blueviolet;
-    font-family: 'Gill Sans', 'Gill Sans MT';
 }
