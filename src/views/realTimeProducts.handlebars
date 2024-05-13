@@ -23,13 +23,17 @@
     </div>
         <h2>Agregar Producto:</h2>
         <div>
-            <form action=""></form>
-            <button id="add_product_id"></button>
+            <form method="POST" action="add_product" id="add_product_id">
+                <input type="text" name="message">
+                <button type="submit" name="action" value="agregar">Agregar producto al carrito</button>
+            </form>
         </div>
             <h2>Eliminar Producto:</h2>
         <div>
-            <form action="delete_prdouct_id"></form>
-            <button id="delete_product_id"></button>
+            <form method="POST" action="delete_product" id="delete_product_id">
+                <input type="text" name="message">
+                <button type="submit" name="action" value="eliminar">Eliminar producto del carrito</button>
+            </form>
         </div>
 
 </body>

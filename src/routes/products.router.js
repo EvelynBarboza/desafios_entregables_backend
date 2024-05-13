@@ -1,6 +1,10 @@
 const { Router } = require('express'); 
 //import { uploader } from '../utils.js';
+const ProductManager = require('../../productManager')
+
 const router = Router();
+
+const productManager = new ProductManager();
 
 //ENDPOINT -- obtener todos los productos
 router.get('/', async (req, res) => {
@@ -17,13 +21,6 @@ router.get('/', async (req, res) => {
       console.error('Error al obtener los productos');
       res.status(500).send('ups! ah ocurrido un error...')
      }
-    
-    //fs.readFile('../products.json', 'utf8', (err, data) => {
-      //if (err) {
-        //console.error('Error al leer el archivo');
-        //return res.status(500).send('Error')
-      //}
-     //res.send('Mi primer "Hola Mundo" desde el backend con Express');
     });
   
   
@@ -49,6 +46,45 @@ router.get('/', async (req, res) => {
          // res.status(404).send('Producto no encontrado');
       //}
      });
+
+//loque estaba en views.router
+     //ENDPOINT en ruta raiz me trae los productos
+
+router.get('/', async (req, res) => {
+  try{
+      const products = await productManager.getProducts()
+      res.render('home', {
+          title: 'Listado de productos:',
+          products: products,
+          style: 'homestyle.css',
+          
+      });
+  } catch (error){
+      console.error(error);
+      res.status(500).send('Error al obtener los productos')
+  }
+
+})
+
+//ENDPOINT me trae los productos en tiempo real
+router.get('/realtimeproducts', async (req, res) =>{
+  try{
+      const products = await productManager.getProducts()
+      res.render('realTimeProducts', {
+          title: 'Listado de productos:',
+          products: products,
+          style: 'homestyle.css',
+          
+      });
+  } catch (error){
+      console.error(error);
+      res.status(500).send('Error al obtener los productos')
+  }
+
+});
+
+//ENDPOINT ELIMINAR PRODUCTO
+router.post('/rea')
   
      module.exports = router;
    

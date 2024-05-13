@@ -3,8 +3,11 @@ const fs = require('fs');
 const userRouter =require('./routes/users.router.js');
 const productsRouter = require('./routes/products.router.js')
 const viewsRouter = require('./routes/views.router.js')
+const index = require('../src/config/index.js')
+const ProductManager = require('../productManager.js')
 const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
+const mongoose = require('mongoose')
 
 
 const app = express();
@@ -13,6 +16,8 @@ const app = express();
 const httpServer = app.listen(8080, error => {
   console.log('Servidor escuchando en el puerto 8080 ♥')
 });
+
+
 //creamos socketserver para el servidor
 const socketServer = new Server(httpServer)
 
@@ -20,18 +25,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
 
+//mongoose.connect('mongodb://127.0.0.1:27017/c53145')
+mongoose.connect('mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce')
+
 //inicializamos y indicamos el motor de hdb que tiene que usar
 app.engine('handlebars', handlebars.engine()),
 app.set('views', __dirname+'/views'); //ruta de las plantillas
 app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 
-
 //app.get('/', (req, res) =>{
   //res.render('home')
 //})
 
-
+connectDB()
 //app.use(express.static('public')); //carpeta public sea estatica
 //app.use('/static', express.static(__dirname +'/public'));
 
@@ -47,10 +54,27 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productsRouter)
 
 
-socketServer.on('connection', socket => {
-    console.log('Nuevo cliente conectado')
+
+
+socketServer.on('connection', data => {
+   console.log('Nuevo cliente conectado')
 })
-// socket.emit('Todos_los_productos', await productManager.getProducts()) => {
+
+
+const prodManager = new ProductManager();
+
+const products = prodManager.getProducts()
+//console.log(products)
+
+function dispara(){
+  socketServer.emit('Todos_los_productos', 'products') 
+  //console.log('hola')
+}
+
+
+dispara()
+
+
 // {
 //   try {    
 //   }

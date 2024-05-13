@@ -1,4 +1,5 @@
 //Mensajes que recibe el cliente en frontend
+//const socket = require('socket.io');
 
 const socket = io()
 
@@ -10,6 +11,9 @@ socket.on('connection', ()=> {
     console.log('Conectado a Socket')
 });
 
+socket.on('Todos_los_productos', (data)=> {
+    console.log('Esto son los datos', data)
+});
 
 //input.addEventListener('keyup', evt =>{
 //    if (evt.key === 'Enter'){
