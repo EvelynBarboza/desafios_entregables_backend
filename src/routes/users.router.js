@@ -2,12 +2,12 @@ const { Router } = require('express');
 const { usersModel } = require('../models/users.models.js');
 //import { uploader } from '../utils.js';
 const router = Router();
-
+//const usersManager = new UsersManagerMongo() clase mongoavanzado min 20
 
 
 //ENDPOINT traer todos los usuarios usuariosn api/users
 router.get('/', async (req,res) =>{
-    const users = await usersModel.find({})
+    const users = await usersModel.find({}).explain('executionStats')
     res.send({status: 'success', payload: users})
 })
 

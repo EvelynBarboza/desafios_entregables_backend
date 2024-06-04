@@ -86,5 +86,6 @@ router.get('/realtimeproducts', async (req, res) =>{
 //ENDPOINT ELIMINAR PRODUCTO
 router.post('/rea')
   
-     module.exports = router;
+
+module.exports = router;
    

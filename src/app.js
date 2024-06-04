@@ -1,13 +1,16 @@
 const express = require('express');
-const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const session = require('express-session')
 const userRouter =require('./routes/users.router.js');
-const productsRouter = require('./routes/products.router.js')
-const viewsRouter = require('./routes/views.router.js')
-const index = require('../src/config/index.js')
-const ProductManager = require('../productManager.js')
+const productsRouter = require('./routes/products.router.js');
+const viewsRouter = require('./routes/views.router.js');
+const pruebaCookie = require('./routes/cookies.router.js');
+const ProductManager = require('../productManager.js');
 const handlebars = require('express-handlebars');
+const { connectDB } = require('../src/config/index.js');
+const { sessionRouter } = require('./routes/sessions.router.js')
 const { Server } = require('socket.io');
-const mongoose = require('mongoose')
+const { sessionRouter } = require('./routes/sessions.router.js');
 
 
 const app = express();
@@ -19,14 +22,22 @@ const httpServer = app.listen(8080, error => {
 
 
 //creamos socketserver para el servidor
-const socketServer = new Server(httpServer)
+const socketServer = new Server(httpServer);
 
+//midlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
+app.use(cookieParser('s3cr3t&f1rm4'));
+app.use(session({
+  secret: 's3cr37c0d3r',
+  resave: true,
+  saveUninitialized: true
+}))
 
+connectDB()
 //mongoose.connect('mongodb://127.0.0.1:27017/c53145')
-mongoose.connect('mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce')
+//mongoose.connect('mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce')
 
 //inicializamos y indicamos el motor de hdb que tiene que usar
 app.engine('handlebars', handlebars.engine()),
@@ -49,9 +60,11 @@ connectDB()
 //  next()
 //})
 
-app.use('/', viewsRouter)
+app.use('/', viewsRouter);
 app.use('/api/users', userRouter);
-app.use('/api/products', productsRouter)
+app.use('/api/products', productsRouter);
+app.use('/cookie', pruebaCookie);
+app.use('/api/sessions', sessionRouter);
 
 
 
@@ -61,9 +74,9 @@ socketServer.on('connection', data => {
 })
 
 
-const prodManager = new ProductManager();
+//const prodManager = new ProductManager();
 
-const products = prodManager.getProducts()
+//const products = prodManager.getProducts()
 //console.log(products)
 
 function dispara(){
