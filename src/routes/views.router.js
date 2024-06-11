@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const ProductManager = require('../../productManager')
 //require('socket.io/socket.io.js')
-
+const UserManagerMongo = require ('../dao/userManagerMongo')
 const router = Router()
 
 
@@ -10,15 +10,31 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/login', (req, res)=>{
-    res.render('main')
+    res.render('login')
 })
 
 router.get('/register', (req, res)=>{
-    res.render('main')
+    res.render('register')
 })
 
 router.get('/products', (req, res)=>{
     res.render('main')
+})
+
+router.get('/users', auth, async (req, res) =>{
+    const { numPage, limit } = req.query
+
+    const userService = new UserManagerMongo()
+    const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = await userService.getUsers({limit, numPage})
+
+    res.render('users', {
+        users: docs,
+        page,
+        hasNextPage,
+        hasPrevPage,
+        nextPage,
+        prevPage
+    })
 })
 
 router.get('/perfil', (req, res)=>{

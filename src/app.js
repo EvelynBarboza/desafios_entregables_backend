@@ -11,7 +11,8 @@ const { connectDB } = require('../src/config/index.js');
 const { sessionRouter } = require('./routes/sessions.router.js')
 const { Server } = require('socket.io');
 const { sessionRouter } = require('./routes/sessions.router.js');
-
+//const fileStore= require('session-file-store')
+const MongoStore = require ('connect-mongo')
 
 const app = express();
 
@@ -30,7 +31,16 @@ app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
 app.use(cookieParser('s3cr3t&f1rm4'));
 app.use(session({
-  secret: 's3cr37c0d3r',
+  store: MongoStore.create({
+    mongoUrl: 'mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce',
+    //agregarnombre bd
+    mongoOptions: {
+      userNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+    ttl: 60 * 60 * 1000 * 24
+  }),
+  secret: 's3cr37@c0n7r4s3ña',
   resave: true,
   saveUninitialized: true
 }))
@@ -49,7 +59,6 @@ app.set('view engine', 'handlebars'); //uso del motor de hdb
   //res.render('home')
 //})
 
-connectDB()
 //app.use(express.static('public')); //carpeta public sea estatica
 //app.use('/static', express.static(__dirname +'/public'));
 

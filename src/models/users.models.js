@@ -11,7 +11,11 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    gener: String
+    password: String,
+    //role: {
+    //    type: String,
+    //    default: 'user'
+    //}
 });
 
 const usersModel = model('users', userSchema);
