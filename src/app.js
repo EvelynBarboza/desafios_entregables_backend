@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session')
 const userRouter =require('./routes/users.router.js');
+//const cartsRouter = require('../src/routes/cart.router.js')
 const productsRouter = require('./routes/products.router.js');
 const viewsRouter = require('./routes/views.router.js');
 const pruebaCookie = require('./routes/cookies.router.js');
@@ -10,9 +11,11 @@ const handlebars = require('express-handlebars');
 const { connectDB } = require('../src/config/index.js');
 const { sessionRouter } = require('./routes/sessions.router.js')
 const { Server } = require('socket.io');
-const { sessionRouter } = require('./routes/sessions.router.js');
 //const fileStore= require('session-file-store')
 const MongoStore = require ('connect-mongo')
+//passport
+const passport = require('passport')
+const  { initPassport } = require('../src/config/passport.confi.js')
 
 const app = express();
 
@@ -30,10 +33,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
 app.use(cookieParser('s3cr3t&f1rm4'));
+
+//SESSION MONGO CONFIG
 app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce',
-    //agregarnombre bd
     mongoOptions: {
       userNewUrlParser: true,
       useUnifiedTopology: true,
@@ -41,9 +45,13 @@ app.use(session({
     ttl: 60 * 60 * 1000 * 24
   }),
   secret: 's3cr37@c0n7r4s3ña',
-  resave: true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: false
 }))
+initPassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 connectDB()
 //mongoose.connect('mongodb://127.0.0.1:27017/c53145')
@@ -73,6 +81,7 @@ app.use('/', viewsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/products', productsRouter);
 app.use('/cookie', pruebaCookie);
+//localhost:8080/api/sessions/githubcallback
 app.use('/api/sessions', sessionRouter);
 
 
