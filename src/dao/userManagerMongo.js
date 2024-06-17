@@ -1,6 +1,6 @@
 const { userModel } = require ('../models/users.models.js')
 
-export class UserManagerMongo {
+class UserManagerMongo {
     constructor () {
         this.userModel = userModel;
     }
@@ -21,4 +21,8 @@ export class UserManagerMongo {
     async getUserByEmail(email) {
         return this.users.find((user) => user.email === email);
     }
+}
+
+module.exports = {
+    UserManagerMongo
 }

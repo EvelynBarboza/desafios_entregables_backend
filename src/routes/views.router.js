@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const ProductManager = require('../../productManager')
 //require('socket.io/socket.io.js')
+const {auth} = require('../middlewares/auth.middleware.js')
 const UserManagerMongo = require ('../dao/userManagerMongo')
 const router = Router()
 

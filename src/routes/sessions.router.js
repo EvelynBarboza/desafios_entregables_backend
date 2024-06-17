@@ -6,7 +6,7 @@ const { createHash, isValidPassword } = require ('../utils/bcrypt.js');
 
 //const router = Router()
 
-export const sessionRouter = Router();
+const sessionRouter = Router();
 
 const userService = new UserManagerMongo();
 
@@ -19,56 +19,70 @@ sessionRouter.get('/githubcallback', passport.authenticate('github', {failureRed
     res.redirect('/products')
 })
 
-//sessionRouter.post('/register', async (req, res) => {
-//    try {
-//        const { first_name, last_name, email, password } = req.body
-//            if (!email || !password) return res.status(401).send({status: 'error', error: 'Se deben completar todos los sampos'})
-//
-//        const userExist = await userService.getUserBy(email)
-//            if(userExist) return res.status(401).send({status: 'error', error: 'Este usuario ya existe'})
-//    
-//        const newUser = {
-//        first_name,
-//        last_name,
-//        email,
-//        password: createHash(password)
-//    }
-//
-//    const result = await userService.createUser(newUser)
-//    //validar el resultado
-//    console.log(result)
-//
-//    res.send ('Usuario registardo')
-//
-//    } catch (error) {
-//        console.error('error')
-//    }
-//})
+sessionRouter.post('/register', async (req, res) => {
+    try {
+        const { first_name, last_name, email, password } = req.body
+            if (!email || !password) return res.status(401).send({status: 'error', error: 'Se deben completar todos los sampos'})
 
-//sessionRouter.post( '/login', async (req, res) =>{
-//    try {
-//        const { email, password } = req.body
-//            if (!email || !password) return res.status(401).send({status: 'error', error: 'Se deben completar todos los campos'})
-//        //if (email !== 'algunmail que traiga de la base de datos' || password !== 'con la password del mismo mail') return res.send('login fallo')
-//        const userFound = await userService.getUserBy({email})
-//            if(!userFound) return res.status(400).send({status: 'error', error: 'Usuario no encontrado'})
-//            
-//        if (!isValidPassword(password, {password: userFound.password})) return res.status(401).send({status: 'error', error: 'Password incorrecto'})
-//
-//
-//        req.session.user = {
-//            email,
-//            first_name,
-//            last_name,
-//            admin: userFound.role === 'admin'
-//        }
-//        
-//        console.log(req.session.user)
-//        res.send('login success')
-//    } catch (error) {
-//        console.error('error')
-//    }
-//})
+        const userExist = await userService.getUserBy(email)
+            if(userExist) return res.status(401).send({status: 'error', error: 'Este usuario ya existe'})
+    
+        const newUser = {
+        first_name,
+        last_name,
+        email,
+        password: createHash(password)
+    }
+
+    const result = await userService.createUser(newUser)
+    //validar el resultado
+    console.log(result)
+
+
+// AGREGAR COOKIE TOKEN
+
+
+    res.send ('Usuario registardo')
+
+    } catch (error) {
+        console.error('error')
+    }
+})
+
+sessionRouter.post( '/login', async (req, res) =>{
+    try {
+        const { email, password } = req.body
+            if (!email || !password) return res.status(401).send({status: 'error', error: 'Se deben completar todos los campos'})
+        //if (email !== 'algunmail que traiga de la base de datos' || password !== 'con la password del mismo mail') return res.send('login fallo')
+        const userFound = await userService.getUserBy({email})
+            if(!userFound) return res.status(400).send({status: 'error', error: 'Usuario no encontrado'})
+            
+        if (!isValidPassword(password, {password: userFound.password})) return res.status(401).send({status: 'error', error: 'Password incorrecto'})
+
+
+        //req.session.user = {
+         //   email,
+         //   first_name,
+         //   last_name,
+         //   admin: userFound.role === 'admin'
+        //}
+        
+        //console.log(req.session.user)
+        //res.send('login success')
+
+        const token = generateToken({
+            id: userFound._id,
+            email
+        })
+
+        res.cookie('cookieToken', token, {
+            maxAge: 60* 60 * 1000 *24, 
+            httpOnly: true
+        }).send({status: 'succes'})
+    } catch (error) {
+        console.error('error')
+    }
+})
 
 sessionRouter.get('/current', auth, (req, res) =>{
     res.send('Datos sensibles que solo puede ver el admin')
@@ -118,3 +132,7 @@ sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/
 sessionRouter.post('/faillogin', async (req, res) =>{
     res.send({error: 'fallo el login'})
 })
+
+module.exports ={
+    sessionRouter
+}

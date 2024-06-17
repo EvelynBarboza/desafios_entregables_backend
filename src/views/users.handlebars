@@ -1,5 +1,5 @@
 <main>
-    <a href="/api/sessions/logout" class="btn btn-outline-danger w-25 mt-3">Logout</a>
+    <a href="/" class="btn btn-outline-danger w-25 mt-3">Logout</a>
     <div>
         <h1>Usuarios</h1>
         {{#each users}}
@@ -17,3 +17,13 @@
         </center>
     </div>
 </main>
+
+<script>
+    fetch('/users', {
+        headers: {
+            "Content-Type": "aplication/json",
+            "Autorization": `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    //falta crear funcion para traer todos los usuarios en el body
+</script>

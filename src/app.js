@@ -39,8 +39,8 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce',
     mongoOptions: {
-      userNewUrlParser: true,
-      useUnifiedTopology: true,
+      //useNewUrlParser: true,
+      //useUnifiedTopology: true,
     },
     ttl: 60 * 60 * 1000 * 24
   }),
@@ -48,7 +48,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
-initPassport()
+//initPassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
