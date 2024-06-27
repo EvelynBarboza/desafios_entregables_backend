@@ -1,6 +1,6 @@
 const { Router } = require('express'); 
 //import { uploader } from '../utils.js';
-const ProductManager = require('../../productManager')
+const ProductManager = require('../../../productManager')
 
 const router = Router();
 

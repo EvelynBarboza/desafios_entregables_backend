@@ -1,19 +1,13 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const session = require('express-session')
-const userRouter =require('./routes/users.router.js');
-//const cartsRouter = require('../src/routes/cart.router.js')
-const productsRouter = require('./routes/products.router.js');
-const viewsRouter = require('./routes/views.router.js');
-const pruebaCookie = require('./routes/cookies.router.js');
-const ProductManager = require('../productManager.js');
+const session = require('express-session');
 const handlebars = require('express-handlebars');
+const MongoStore = require ('connect-mongo');
+const routerApp = require('../src/routes/index.js')
+const ProductManager = require('../productManager.js');
 const { connectDB } = require('../src/config/index.js');
-const { sessionRouter } = require('./routes/sessions.router.js')
+//const { sessionRouter } = require('./routes/sessions.router.js');
 const { Server } = require('socket.io');
-//const fileStore= require('session-file-store')
-const MongoStore = require ('connect-mongo')
-//passport
 const passport = require('passport')
 const  { initPassport } = require('../src/config/passport.confi.js')
 
@@ -33,7 +27,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
 app.use(cookieParser('s3cr3t&f1rm4'));
-
 //SESSION MONGO CONFIG
 app.use(session({
   store: MongoStore.create({
@@ -51,6 +44,7 @@ app.use(session({
 //initPassport()
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(routerApp)
 
 
 connectDB()
@@ -63,13 +57,6 @@ app.set('views', __dirname+'/views'); //ruta de las plantillas
 app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 
-//app.get('/', (req, res) =>{
-  //res.render('home')
-//})
-
-//app.use(express.static('public')); //carpeta public sea estatica
-//app.use('/static', express.static(__dirname +'/public'));
-
 //usando middleware clase router multer
 //app.use((req, res, next) =>{
 //  console.log('Tiempo: ', Date());
@@ -77,59 +64,6 @@ app.set('view engine', 'handlebars'); //uso del motor de hdb
 //  next()
 //})
 
-app.use('/', viewsRouter);
-app.use('/api/users', userRouter);
-app.use('/api/products', productsRouter);
-app.use('/cookie', pruebaCookie);
-//localhost:8080/api/sessions/githubcallback
-app.use('/api/sessions', sessionRouter);
-
-
-
-
 socketServer.on('connection', data => {
    console.log('Nuevo cliente conectado')
 })
-
-
-//const prodManager = new ProductManager();
-
-//const products = prodManager.getProducts()
-//console.log(products)
-
-function dispara(){
-  socketServer.emit('Todos_los_productos', 'products') 
-  //console.log('hola')
-}
-
-
-dispara()
-
-
-// {
-//   try {    
-//   }
-///eliminacion de un producto
-//socket.on('eliminarProducto', (productoId) => {
-// console.log('Eliminar producto:', productoId);
-
-//);
-// const message = []
-
-// socket.on('message_cliente', data =>{
-//   console.log(data)
-//   message.push({id: socket.id, message: data})
-//
-//   socketServer.emit('message-server', message)
-// })
-//)
-
-///socket.on('message', data => {
-///  console.log(data)
-///})
-///socket.emit('socket_individual', 'Este mensaje solo lo debe recibir este socket')
-///
-///socket.broadcast.emit('Para_todos_menos_el_que_lo_manda', 'Lo ven todos los socket conectados menos el que lo manda ')
-///
-///socketServer.emit('Eventos_para_todes_incluyendo_el_que_manda', 'Este lo ven todos')
-///

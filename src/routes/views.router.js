@@ -4,13 +4,14 @@ const ProductManager = require('../../productManager')
 const {auth} = require('../middlewares/auth.middleware.js')
 const UserManagerMongo = require ('../dao/userManagerMongo')
 const router = Router()
+const { authenticate } = require('../middlewares/authorizarion.middleware.js')
 
 
 router.get('/', (req, res)=>{
     res.render('main')
 })
 
-router.get('/login', (req, res)=>{
+router.get('/login', auth, (req, res)=>{
     res.render('login')
 })
 
@@ -38,8 +39,15 @@ router.get('/users', auth, async (req, res) =>{
     })
 })
 
-router.get('/perfil', (req, res)=>{
+//RUTA PARA PERFIL DEL USUARIO
+router.get('/perfil', auth, (req, res)=>{
     res.render('main')
+})
+
+
+//RUTA PARA CARTS
+router.get('/carts', authenticate(['users', 'users_premium', 'admin']), (req, res) => {
+    res.render('carts', {user: req.user});
 })
 
 //router.post('/upload-file', uploader.single('myfile'),(req, res) =>{
