@@ -6,7 +6,7 @@ const pruebaCookie = require('../routes/api/cookies.router.js');
 const {sessionRouter} = require('../routes/api/sessions.router.js');
 const {cartsRouter} = require('../routes/api/cart.router.js');
 
-const router = Router()
+const router = Router();
 
 //const sessionRouterClass = new sessionRouter
 router.use('/', viewsRouter);

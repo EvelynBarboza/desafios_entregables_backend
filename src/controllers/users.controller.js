@@ -1,6 +1,8 @@
+const { UserManagerMongo } = require("../dao/userDaoMongo")
+
 class userController {
     constructor(){
-
+        this.userService = UserManagerMongo()
     }
 
 //traer todos los usuarios
@@ -8,7 +10,7 @@ class userController {
         const users = await usersModel.find({}).explain('executionStats')
         res.send({status: 'success', payload: users})
     }
-    
+
 //traer un usuario por id
     getUser = async (req, res) =>{
         const { uid } = req.params

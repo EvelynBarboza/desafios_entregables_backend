@@ -2,20 +2,20 @@ const { userModel } = require ('../models/users.models.js')
 
 class UserManagerMongo {
     constructor () {
-        this.userModel = userModel;
+        this.usersModel = usersModel;
     }
 
     async getUsers({limit = 10, numPage= 1}) {
-        const users = await this.userModel.paginate({}, {limit, page: numPage, sort: {price: -1}, lean: true })
+        const users = await this.usersModel.paginate({}, {limit, page: numPage, sort: {price: -1}, lean: true })
         return users    
     }
 
     async createUser(newUser) {
-        return await this.userModel.create(newUser)
+        return await this.usersModel.create(newUser)
     }
 
     async getUserBy(filter) {
-        return this.userModel.findOne({filter});
+        return this.usersModel.findOne({filter});
     }
 
     async getUserByEmail(email) {
