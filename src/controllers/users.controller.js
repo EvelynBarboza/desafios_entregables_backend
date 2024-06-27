@@ -2,7 +2,7 @@ const { UserManagerMongo } = require("../dao/userDaoMongo")
 
 class userController {
     constructor(){
-        this.userService = UserManagerMongo()
+        this.userService = userService
     }
 
 //traer todos los usuarios
