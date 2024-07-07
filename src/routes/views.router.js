@@ -20,7 +20,7 @@ router.get('/register', (req, res)=>{
 })
 
 router.get('/products', (req, res)=>{
-    res.render('main')
+    res.render('products')
 })
 
 router.get('/users', auth, async (req, res) =>{

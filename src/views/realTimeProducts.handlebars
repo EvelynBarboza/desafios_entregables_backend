@@ -3,18 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Productos en tiempo real</title>
+    <script src=" /socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io();
+
+        //al conectarse se solicitan los products
+            socket.emit('getProducts');
+            socket.on('products', (products) =>{
+                const productsList = document.getElementById('products-list');
+                productsList.innerHTML = '';
+
+                products.forEach(product => {
+                    const li = document.createElement('li');
+                    li.textContent = `${product.name} - ${product.price} - ${product.description} - ${product.code} - ${product.stock}`;
+                    productsList.appendChild(li);
+                });
+            });
+        })
+    </script>
 </head>
 <body>
-    <div>
+    <h1>PRODUCTOS EN TIEMPO REAL</h1>
+    <ul id="products-list"></ul>
+    <div id="product-list">
         {{#each products}}
         <div>
+            <ul id="product-list">
             <h3>{{this.title}}</h3>
             <p>{{this.description}}</p>
             <p>Precio: {{this.price}}</p>
             <p>Stock:{{this.stock}}</p>
             <p>Codigo: {{this.code}}</p>
             <p>id:{{this.id}}</p>
+            </ul>
             <div>
                 <img src="{{this.thumbnail}}" alt=""/>
             </div>

@@ -1,5 +1,5 @@
 const { Router } = require('express'); 
-const userController = require('../../controllers/users.controller');
+const UserController = require('../../controllers/users.controller');
 
 const router = Router();
 const {
@@ -9,22 +9,22 @@ const {
   updateUser,
   deleteUser
 
-} = userController()
+} = new UserController();
 
 //TARER TODOS LOS USUARIOS
-router.get('/', getUsers)
+router.get('/', passport.authenticate('jwt', { session: false }), getUsers)
 
 // TRAER UN USUARIO POR ID
-router.get('/:uid', getUser)
+router.get('/:uid', passport.authenticate('jwt', { session: false }), getUser)
 
 // CREAR UN USUARIO
-router.post('/', createUser)
+router.post('/', passport.authenticate('jwt', { session: false }), createUser)
 
 //ACTUALIZAR UN USUARIO
-router.put('/:uid', updateUser)
+router.put('/:uid', passport.authenticate('jwt', { session: false }), updateUser)
 
 //ELIMINAR UN USUARIO
-router.delete('/:uid', deleteUser)
+router.delete('/:uid', passport.authenticate('jwt', { session: false }), deleteUser)
 
 
 

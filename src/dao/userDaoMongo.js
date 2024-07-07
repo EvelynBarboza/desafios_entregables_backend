@@ -1,4 +1,5 @@
-const { userModel } = require ('../models/users.models.js')
+const { usersModel } = require ('../models/users.models.js')
+const paginate = require('mongoose-paginate-v2');
 
 class UserManagerMongo {
     constructor () {
@@ -19,10 +20,10 @@ class UserManagerMongo {
     }
 
     async getUserByEmail(email) {
-        return this.users.find((user) => user.email === email);
+        return this.usersModel.findOne({email});
     }
+    
 }
 
-module.exports = {
-    UserManagerMongo
-}
+module.exports = 
+    {UserManagerMongo};

@@ -16,3 +16,5 @@ router.use('/cookie', pruebaCookie);
 router.use('/api/carts', cartsRouter);
 //localhost:8080/api/sessions/githubcallback
 router.use('/api/sessions', sessionRouter);
+
+module.exports = router;
