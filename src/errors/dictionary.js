@@ -1,18 +1,18 @@
 module.exports = {
     PRODUCT_NOT_FOUND: {
         code: 'PRODUCT_NOT_FOUND',
-        message: 'Product not found.'
+        message: 'Producto no encontrado'
     },
     CART_NOT_FOUND: {
         code: 'CART_NOT_FOUND',
-        message: 'Cart not found.'
+        message: 'Carrito no encontrado'
     },
     INVALID_PRODUCT_DATA: {
         code: 'INVALID_PRODUCT_DATA',
-        message: 'Provided product data is invalid.'
+        message: 'Ls informacion es invalida.'
     },
     INTERNAL_SERVER_ERROR: {
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'An unexpected error occurred.'
+        message: 'A ocurrido un error interni del servidor'
     }
 };
