@@ -1,4 +1,4 @@
-const faker = require('@faker-js/faker');
+const {faker} = require('@faker-js/faker');
 
 const generateMockProducts = (count = 100) => {
 
@@ -20,6 +20,6 @@ const generateMockProducts = (count = 100) => {
     }
     return products;
 
-}
+};
 
 module.exports = generateMockProducts;

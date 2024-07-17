@@ -1,5 +1,9 @@
-const { productsModel } = require('../models/products.models')
-const { cartModel } = require('../models/cart.models')
+const { productsModel } = require('../models/products.models.js')
+const { cartModel } = require('../models/carts.models.js');
+const CustomError = require('../errors/customError.js');
+const errorDictionary = require('../errors/dictionary.js');
+const { error } = require('console');
+const { runInThisContext } = require('vm');
 
 class ProductManagerMongo {
     constructor() {
@@ -9,11 +13,13 @@ class ProductManagerMongo {
 //traer todos los productos
 async getAllProducts() {
     try {
-        const product = await this.products.find();
-        return this.products;
+        return await this.products.find();
+        //const product = await this.products.find();
+        //return this.products;
     } catch (error) {
-        console.error('Error al obtener los productos', error);
-        throw error;
+        throw new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+        //console.error('Error al obtener los productos', error);
+        //throw error;
     }
 }
 
@@ -21,14 +27,16 @@ async getAllProducts() {
 //ENDPOINT traer producto por su id
     async getProductById(pid) {
         try {
-        // Buscar el producto por su Id en la base de datos
             const product = await this.products.findById(pid);
-
-        // Retornar el producto encontrado
+            //*******//
+            if(!product) {
+                throw new CustomError(errorDictionary.PRODUCT_NOT_FOUND);
+            }//******//
             return product;
         } catch (error) {
-            console.error('Error al obtener el producto por su Id:', error);
-            throw error;
+            throw  new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+            //console.error('Error al obtener el producto por su Id:', error);
+           // throw error;
         }
     }
 
@@ -40,8 +48,9 @@ async createProduct(productData) {
         return newProduct;
 
     } catch (error) {
-        console.error('Erros al crear el producto', error);
-        throw error;
+        throw new CustomError(errorDictionary.INVALID_PRODUCT_DATA, error.message);
+        //console.error('Erros al crear el producto', error);
+       // throw error;
 
         }
     }
@@ -50,28 +59,35 @@ async createProduct(productData) {
     async updateProduct (pid, productData) {
         try {
             const updateProduct = await this.products.findByAndUpdate(pid, productData, { new: true });
+            //******//
+            if (!updateProduct){
+                throw new CustomError(errorDictionary.PRODUCT_NOT_FOUND);
+            }
             return updateProduct;
 
         }catch(error) {
-            console.error('Error al actualizar el producto', error);
-            throw error;
+            throw new CustomError(errorDictionary.INVALID_PRODUCT_DATA, error.message);
+           // console.error('Error al actualizar el producto', error);
+            //throw error;
         }
     }
 
     async addProductToCart (cid, pid) {
       try {
             const cart = await cartModel.findById(cid)
-            const index = cart.products.findIndex(product => pid === product.product.toString())
+            const index = cart.products.findIndex(product => pid === product.product.toString());
             if (index !== -1) {
                 cart.products[index].quantity++;
         } else {
             cart.products.push({ product: pid, quantity: 1 });
-        }await cart.save();
+        }
+        await cart.save();
         return cart;
       
         }catch (error) {
-            console.error('Error al añadir producto al carrito:', error);
-            throw error;
+            throw new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+            //console.error('Error al añadir producto al carrito:', error);
+            //throw error;
         }
       
       }
@@ -82,8 +98,9 @@ async createProduct(productData) {
             const products = await this.products.find();
             return products;
         } catch (error) {
-            console.error('Error al obtener productos');
-            throw error;
+            throw new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+            //console.error('Error al obtener productos');
+            //throw error;
         }
       }
       
@@ -102,12 +119,14 @@ async createProduct(productData) {
                 await cart.save();
                 return cart;
             } else {
-                console.log ('El producto no esta en el carrito');
-                return cart;
+                throw new CustomError(errorDictionary.PRODUCT_NOT_FOUND);
+                //console.log ('El producto no esta en el carrito');
+                //return cart;
             }
         } catch (error){
-            console.error('Error al eliminar el producto del carrito');
-            throw error;
+            throw new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+            //console.error('Error al eliminar el producto del carrito');
+            //throw error;
         }
       }
       
@@ -116,12 +135,19 @@ async createProduct(productData) {
     async deleteProduct(pid){
         try {
             const result = await this.products.findByAndDelete(pid);
-            return result !== null;
+            //*****//
+            if(!result){
+                throw new CustomError(errorDictionary.PRODUCT_NOT_FOUND);
+            }//*****//
+            return result;
+           // return result !== null;
         } catch (error) {
-            console.error('Error al eliminar el productos', error);
-            throw error;
+            throw new CustomError(errorDictionary.INTERNAL_SERVER_ERROR, error.message);
+            //console.error('Error al eliminar el productos', error);
+            //throw error;
         }
     }
 
 }
+
 module.exports = ProductManagerMongo;

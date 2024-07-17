@@ -10,6 +10,7 @@ const { Server } = require('socket.io');
 const passport = require('passport')
 const  { initPassport } = require('../src/config/passport.confi.js')
 const ProductManager = require('../src/dao/productDaoMongo.js');
+const errorHandler =require('./middlewares/errorHandler.js')
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 //RUTAS PRINCIPALES DE LA APP
 app.use(routerApp);
+app.use(errorHandler);
 
 
 //MANEJO DE EVENTOS WEBSOCKET
