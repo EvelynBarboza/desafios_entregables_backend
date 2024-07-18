@@ -1,31 +1,60 @@
-//const passport = require('passport');
+const passport = require('passport');
 //const local = require('passport-local');
-//const {  UserManagerMongo } = require('../dao/userManagerMongo.js')
 //const { createHash, isValidPassword } = require ('../utils/bcrypt.js');
 //const jwt = require('passport-jwt')
-//const {Strategy, ExtractJwt } = require ('passport-jwt');
-//const { PRIVATE_KEY } = require('../utils/jwt.js')
-
-//const GithubStrategy = require('passport-github2')
+const {Strategy: JWTStrategy, ExtractJwt } = require ('passport-jwt');
+const { PRIVATE_KEY } = require('../utils/jwt.js');
+const {  UserManagerMongo } = require('../dao/userDaoMongo.js');
+//const GithubStrategy=require('passport-github2');
 
 
 //const localStrategy = local.Strategy;
-//const userService = new UserManagerMongo()
+
+//INICIALIZAR USERMANAGERMONGO
+const userService = new UserManagerMongo();
+
+//EXTRAER COOKIE
 //const JWTStrategy = Strategy
 //const JWTExtract = ExtractJwt
+const cookieExtractor = req => {
+    let token = null;
+    if(req && req.cookies) {
+        token = req.cookies['jwt'];
+    }
+    return token;
+};
 
-//exports.initializePassport = () => {
-//    passport.use('jwt', new JWTStrategy({
-//        jwtFromRequest: JWTExtract.fromExtractors([cookieExtractor]),
-//        secretOrKey: PRIVATE_KEY
-//    }, async (jwt_payload, done) =>{
-//        try {
-//            return done(null, jwt_payload)
-//        } catch (error) {
-//            return done(error)
-//        }
-//    }))
-//}
+exports.initPassport = () => {
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        secretOrKey: PRIVATE_KEY
+    }, async (jwt_payload, done) =>{
+        try {
+            const user = await userService.getUserBy(jwt_payload.id);
+            if(user){
+                return done(null, user);
+            }else {
+                return done(null, false)
+            }
+        } catch (error) {
+            return done(error);
+        }
+    }))
+    passport.serializeUser((user, done) => {
+               done(null, user._id)
+           });
+           
+    passport.deserializeUser( async (id, done) =>{
+               try {
+                  const user = await userService.getUserBy({_id:id})
+                   done(null, user)
+               } catch (error ){
+                   done(error)
+               }
+           })
+}
+
+
 
 
 //AUTENTICACION CON GITHUB (NUEVO) ( CLASE 22 AUT. POR TERCEROS)
@@ -98,16 +127,5 @@
 //            }
 //    }))
 
-//    passport.serializeUser((user, done) => {
-//        done(null, user._id)
-//    })
-//    passport.deserializeUser( async (id, done) =>{
-//        try {
-//            let user = await userService.getUserBy({_id:id})
-//            done(null, user)
-//        } catch (error ){
-//            done(error)
-//        }
-//    })
-//}
+// 
 

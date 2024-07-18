@@ -1,6 +1,6 @@
 const passport = require('passport');
 const { Router } = require('express');
-const { UserManagerMongo } = require('../../dao/userManagerMongo.js')
+const { UserManagerMongo } = require('../../dao/userDaoMongo.js')
 const { auth } = require('../../middlewares/auth.middleware.js')
 const { createHash, isValidPassword } = require ('../../utils/bcrypt.js');
 

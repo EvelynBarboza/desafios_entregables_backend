@@ -114,4 +114,4 @@ deleteProductForCart = async (req, res) =>{
 }
 
 
-module.exports = new productController();
+module.exports = productController;

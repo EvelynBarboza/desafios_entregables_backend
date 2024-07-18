@@ -1,6 +1,6 @@
 const { Router } = require('express'); 
 const productController = require('../../controllers/products.controller.js');
-
+const passport = require('passport')
 
 const router = Router();
 const {
@@ -18,13 +18,13 @@ router.get('/productos', getProducts);
 router.get('/productos/:pid', getProduct);
 
 //crear prdoucto
-router.post('/', createProduct);
+router.post('/', passport.authenticate('jwt', {session: false}), createProduct);
 
 //actualizar producto 
-router.put('/productos/:pid', updateProduct);
+router.put('/productos/:pid', passport.authenticate('jwt', {session: false}), updateProduct);
 
-//ENDPOINT ELIMINAR PRODUCTO
-router.delete('/productos/:pid', deleteProduct);
+//ELIMINAR PRODUCTO
+router.delete('/productos/:pid', passport.authenticate('jwt', {session: false}), deleteProduct);
   
 
 module.exports = router;

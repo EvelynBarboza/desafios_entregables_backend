@@ -52,23 +52,23 @@ app.use(session({
 initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(routerApp)
 
-//CONEXION A LA BASE DE DATOS
-connectDB();
+
 //mongoose.connect('mongodb://127.0.0.1:27017/c53145')
 //mongoose.connect('mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce')
-
-
-//CONFIG DEL MOTOR DE PLANTILLAS HANDLEBARS
-app.engine('handlebars', handlebars.engine());
-app.set('views', __dirname+'/views'); //ruta de las plantillas
-app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 
 //RUTAS PRINCIPALES DE LA APP
 app.use(routerApp);
 app.use(errorHandler);
+
+//CONEXION A LA BASE DE DATOS
+connectDB();
+
+//CONFIG DEL MOTOR DE PLANTILLAS HANDLEBARS
+app.engine('handlebars', handlebars.engine());
+app.set('views', __dirname+'/views'); //ruta de las plantillas
+app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 
 //MANEJO DE EVENTOS WEBSOCKET
