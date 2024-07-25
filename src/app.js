@@ -10,7 +10,8 @@ const { Server } = require('socket.io');
 const passport = require('passport')
 const  { initPassport } = require('../src/config/passport.confi.js')
 const ProductManager = require('../src/dao/productDaoMongo.js');
-const errorHandler =require('./middlewares/errorHandler.js')
+const errorHandler =require('./middlewares/errorHandler.js');
+const { addLogger } = require('./middlewares/addLogger.js');
 
 const app = express();
 
@@ -33,13 +34,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname +'/public'));
 app.use(cookieParser('s3cr3t&f1rm4'));
+app.use(addLogger)
 
 
 //CONFIG DE SESIONES CON MONGODB
 app.use(session({
   store: MongoStore.create({
     mongoUrl: 'mongodb+srv://Evelyn_barboza:12iarapamela@e-commerce.gt36w0w.mongodb.net/e-commerce_bck?retryWrites=true&w=majority&appName=e-commerce',
-    mongoOptions: {},
+    //mongoUrl: 'mongodb://127.0.0.1:27017/e-commerce_bck',
+    mongoOptions: {
+      //useNewUrlParser: true,
+      //useUnifiedTopology : true,
+      ssl: true,
+    },
     ttl: 60 * 60 * 1000 * 24
   }),
   secret: 's3cr37@c0n7r4s3ña',

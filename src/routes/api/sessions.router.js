@@ -120,7 +120,7 @@ sessionRouter.post('/failregister', async (req, res) =>{
     res.send({error: 'failed'})
 })
 //LOGIN
-sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/faillogin'}), async (req, res) =>{
+sessionRouter.post('/login', async (req, res) =>{
     if(!req.user) return res.status(400).send({status: 'error', error: 'credenciales invalidas'})
         req.session.user = {
             first_name: req.user.first_name,
