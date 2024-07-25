@@ -11,7 +11,7 @@ router.get('/', (req, res)=>{
     res.render('main')
 })
 
-router.get('/login', auth, (req, res)=>{
+router.get('/login', (req, res)=>{
     res.render('login')
 })
 

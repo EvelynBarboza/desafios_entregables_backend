@@ -36,7 +36,7 @@ sessionRouter.post('/register', async (req, res) => {
 
     const result = await userService.createUser(newUser)
     //validar el resultado
-    console.log(result)
+    logger.info(result)
 
 
 // AGREGAR COOKIE TOKEN

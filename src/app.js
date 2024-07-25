@@ -12,6 +12,7 @@ const  { initPassport } = require('../src/config/passport.confi.js')
 const ProductManager = require('../src/dao/productDaoMongo.js');
 const errorHandler =require('./middlewares/errorHandler.js');
 const { addLogger } = require('./middlewares/addLogger.js');
+const logger = require('./utils/logger.js');
 
 const app = express();
 
@@ -20,7 +21,7 @@ const httpServer = app.listen(8080, error => {
   if (error) {
     console.error('Error al iniciar el servidor', error);
   } else {
-    console.log('Servidor escuchando en el puerto 8080 ♥');
+    logger.info('Servidor escuchando en el puerto 8080 ♥');
   }
 });
 
@@ -80,7 +81,7 @@ app.set('view engine', 'handlebars'); //uso del motor de hdb
 
 //MANEJO DE EVENTOS WEBSOCKET
 socketServer.on('connection', (socket)=>{
-  console.log('Nuevo cliente conectado');
+  logger.info('Nuevo cliente conectado');
 
 //ENVIAR LISTA PRODUCT CUANDO SE CONECTA UN CLIENTE
 socket.on('getProducts', async ()=> {
@@ -90,7 +91,7 @@ socket.on('getProducts', async ()=> {
 
 //MANEJO DESCONEXION DEL CLIENTE
 socket.on('disconect',()=>{
-  console.log('cliente desconectado');
+  logger.info('cliente desconectado');
   });
 });
 
